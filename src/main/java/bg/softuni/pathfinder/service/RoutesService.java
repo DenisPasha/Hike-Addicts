@@ -9,13 +9,13 @@ import bg.softuni.pathfinder.model.dto.view.RoutesView;
 import bg.softuni.pathfinder.model.entities.Picture;
 import bg.softuni.pathfinder.model.entities.Route;
 import bg.softuni.pathfinder.model.entities.User;
+import bg.softuni.pathfinder.model.entities.enums.RouteCategory;
 import bg.softuni.pathfinder.repository.RouteRepository;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.*;
 
@@ -109,10 +109,45 @@ public class RoutesService {
 
     public RouteDetailsView getRouteWithMostComments() {
 
-        return modelMapper.map(this.routeRepository.findByRouteCount(PageRequest.of(0,1)).get(0), RouteDetailsView.class);
+        try {
+            return modelMapper.map(this.routeRepository.findByRouteCount(PageRequest.of(0,1)).get(0), RouteDetailsView.class);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     public Route getById(Long id) {
         return routeRepository.findById(id).get();
+    }
+
+    public List<RoutesView> getAllPedestrianRoutes() {
+        return getAllPedestrianRoutes( routeRepository.findByCategorie(RouteCategory.PEDESTRIAN));
+    }
+
+    private List<RoutesView> getAllPedestrianRoutes(List<Route> byCategorie) {
+        List<RoutesView> listToReturn = new ArrayList<>();
+
+        for (Route route : byCategorie) {
+            RoutesView map = modelMapper.map(route, RoutesView.class);
+            Picture picture = pictureService.getPicture(route.getId());
+            map.setContentType(picture.getContentType());
+            map.setThumbnailUrl(Base64.getMimeEncoder().encodeToString(picture.getImage()));
+            listToReturn.add(map);
+        }
+        return listToReturn;
+    }
+
+
+    public List<RoutesView> getAllBicycleRoutes() {
+        return getAllPedestrianRoutes( routeRepository.findByCategorie(RouteCategory.BICYCLE));
+    }
+
+    public List<RoutesView> getAllMotorcycleRoutes() {
+        return getAllPedestrianRoutes( routeRepository.findByCategorie(RouteCategory.MOTORCYCLE));
+    }
+
+    public List<RoutesView> getAllCarRoutes() {
+        return getAllPedestrianRoutes( routeRepository.findByCategorie(RouteCategory.CAR));
     }
 }

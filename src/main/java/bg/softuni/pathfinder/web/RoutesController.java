@@ -71,7 +71,7 @@ public class RoutesController {
         }
         ImageAddBinding img = mapToPicture(id, picture, principal);
         pictureService.savePicture(img);
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping("/routes/details/{id}")

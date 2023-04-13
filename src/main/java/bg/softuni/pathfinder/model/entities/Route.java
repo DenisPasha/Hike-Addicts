@@ -1,6 +1,7 @@
 package bg.softuni.pathfinder.model.entities;
 
 import bg.softuni.pathfinder.model.entities.enums.Level;
+import bg.softuni.pathfinder.model.entities.enums.RouteCategory;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
@@ -34,13 +35,11 @@ public class Route {
     @OneToMany(mappedBy = "route", fetch = FetchType.EAGER)
     private Set<Picture> pictures;
 
-    @ManyToMany
-    private Set<Category> categories;
+    @Enumerated(EnumType.STRING)
+    private RouteCategory categorie;
 
 
-    public Route() {
-        this.categories = new HashSet<>();
-    }
+
 
     public long getId() {
         return id;
@@ -98,12 +97,12 @@ public class Route {
         this.pictures = pictures;
     }
 
-    public Set<Category> getCategories() {
-        return categories;
+    public RouteCategory getCategorie() {
+        return categorie;
     }
 
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
+    public void setCategorie(RouteCategory categorie) {
+        this.categorie = categorie;
     }
 
     public String getDescription() {

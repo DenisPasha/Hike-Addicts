@@ -1,6 +1,9 @@
 package bg.softuni.pathfinder.web;
 import bg.softuni.pathfinder.model.AppUser;
+import bg.softuni.pathfinder.model.dto.view.RouteDetailsView;
+import bg.softuni.pathfinder.model.dto.view.RoutesView;
 import bg.softuni.pathfinder.model.dto.view.UserProfileViewModel;
+import bg.softuni.pathfinder.model.entities.Route;
 import bg.softuni.pathfinder.service.RoutesService;
 import bg.softuni.pathfinder.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -9,6 +12,7 @@ import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import java.security.Principal;
+import java.util.List;
 
 
 @Controller
@@ -29,11 +33,14 @@ public class PagesController {
 
     @GetMapping("/")
     public String getHome(Model model , @AuthenticationPrincipal AppUser appUser){
+        RouteDetailsView mostCommentedRoute = routesService.getRouteWithMostComments();
 
         if (appUser!=null){
         model.addAttribute("fullName",appUser.getFullName());
         }
-           model.addAttribute("mostCommented" ,routesService.getRouteWithMostComments());
+        if(mostCommentedRoute!=null){
+            model.addAttribute("mostCommented" ,mostCommentedRoute);
+        }
         return "index";
     }
 
@@ -48,6 +55,38 @@ public class PagesController {
     @GetMapping("/about")
     public String getAbout(){
         return "about";
+    }
+
+    @GetMapping("/pedestrian")
+    public String getPedestrian(Model model){
+
+        List<RoutesView> allPedestrianRoutes = routesService.getAllPedestrianRoutes();
+        model.addAttribute("allPedestrianRoutes",allPedestrianRoutes);
+        return "pedestrian";
+    }
+
+    @GetMapping("/bicycle")
+    public String getBicycle(Model model){
+
+        List<RoutesView> allBicycleRoutes = routesService.getAllBicycleRoutes();
+        model.addAttribute("allBicycleRoutes",allBicycleRoutes);
+        return "bicycle";
+    }
+
+    @GetMapping("/motorcycle")
+    public String getMotorcycle(Model model){
+
+        List<RoutesView> allMotorcycleRoutes = routesService.getAllMotorcycleRoutes();
+        model.addAttribute("allMotorcycleRoutes",allMotorcycleRoutes);
+        return "motorcycle";
+    }
+
+    @GetMapping("/car")
+    public String getCar(Model model){
+
+        List<RoutesView> allCarRoutes = routesService.getAllCarRoutes();
+        model.addAttribute("allCarRoutes",allCarRoutes);
+        return "car";
     }
 
 

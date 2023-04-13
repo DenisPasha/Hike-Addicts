@@ -75,6 +75,17 @@
             </div>
         </div>
         <div>
+            <div class="form-group">
+                <label for="categories">Categorie</label>
+                <select id="categories" class="custom-select" th:field="*{categorie}">
+                    <option th:each="currentCategorie : ${T(bg.softuni.pathfinder.model.entities.enums.RouteCategory).values()}"
+                            th:text="${currentCategorie}"
+                            th:value="${currentCategorie}"
+                    ></option>
+                </select>
+            </div>
+        </div>
+        <div>
 
             <div class="form-group">
                 <label for="videoUrl">Video Url (only last eleven characters from Youtube)</label>

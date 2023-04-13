@@ -20,5 +20,9 @@ public class PictureService {
     public void savePicture(ImageAddBinding img){
         pictureRepository.save(modelMapper.map(img , Picture.class));
     }
+
+    public Picture getPicture(Long id) {
+       return pictureRepository.findByRouteId(id).orElse(null);
+    }
 }
 

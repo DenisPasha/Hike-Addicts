@@ -1,6 +1,7 @@
 package bg.softuni.pathfinder.repository;
 
 import bg.softuni.pathfinder.model.entities.Route;
+import bg.softuni.pathfinder.model.entities.enums.RouteCategory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,6 @@ public interface RouteRepository extends JpaRepository<Route, Long> {
     List<Route> findByRouteCount(Pageable pageable);
 
 
+
+    List<Route>findByCategorie(RouteCategory categorie);
 }

@@ -16,10 +16,19 @@ public class RouteAddBinding {
     @NotBlank
     private String level;
     private String videoUrl;
-
     private MultipartFile image;
+    private String categorie;
+
 
     public RouteAddBinding() {
+    }
+
+    public String getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(String categorie) {
+        this.categorie = categorie;
     }
 
     public String getName() {

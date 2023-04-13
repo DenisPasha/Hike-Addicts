@@ -1,0 +1,21 @@
+version: '3.3'
+services:
+  db:
+    image: denispasha/mysql:8.0.32
+    ports:
+      - "3307:3306"
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_bin', '--default-authentication-plugin=mysql_native_password']
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD="yes"
+      - MYSQL_DATABASE=pathfinder1
+      - MYSQL_HOST=localhost
+  docker-demo:
+    image: denispasha/pathfinder:v1
+    ports:
+      - "8080:8080" # web ui
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/pathfinder?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 125963Denis

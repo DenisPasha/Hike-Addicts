@@ -94,7 +94,8 @@ public class PagesController {
     }
 
     @GetMapping("all-users")
-    public String getAllUsers(Model model){
+    public String getAllUsers(Model model ,Principal principal){
+        model.addAttribute("principalId" , userService.getUserByUserName(principal.getName()).getId());
         model.addAttribute("users" , userService.getAllUsers() );
         return "all-users";
     }
@@ -102,10 +103,15 @@ public class PagesController {
     @PostMapping("all-users/{id}")
     public String approveUser(@PathVariable Long id){
         userService.approveUser(id);
-        return "redirect:/";
+        return "redirect:/all-users";
     }
 
-    //todo make a approve button to hide if its approved
+    @PostMapping("all-users/{id}/delete")
+    public String deactivateUser(@PathVariable Long id , Model model , Principal principal){
+        userService.deactivateUser(id);
+        return "redirect:/all-users";
+    }
+
 
     //todo fix map
 

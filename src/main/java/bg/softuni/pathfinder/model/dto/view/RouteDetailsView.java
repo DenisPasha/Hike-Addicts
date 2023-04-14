@@ -19,7 +19,17 @@ public class RouteDetailsView {
 
     private Set<PicturesView> pictures;
 
+    private Boolean isActive;
+
     public RouteDetailsView() {
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
     public Long getId() {

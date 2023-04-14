@@ -34,7 +34,7 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Level level;
 
-    private Boolean approved;
+    private Boolean isActive;
 
     public User() {
 
@@ -49,12 +49,12 @@ public class User implements Serializable {
         this.age = age;
     }
 
-    public Boolean getApproved() {
-        return approved;
+    public Boolean getActive() {
+        return isActive;
     }
 
-    public void setApproved(Boolean approved) {
-        this.approved = approved;
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
     public long getId() {

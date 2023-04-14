@@ -108,7 +108,13 @@ public class RoutesController {
         }
         routesService.setRouteApproved(id , isRouteActive );
         // todo make a call to the db to approve the route
-        return "index";
+        return "redirect:/routes";
+    }
+
+    @PostMapping("/routes/details/{id}/delete")
+    public String deleteRoute(@PathVariable Long id){
+        routesService.deleteRoute(id);
+        return "redirect:/routes";
     }
 
 

@@ -164,7 +164,14 @@
             <div sec:authorize="hasRole('ROLE_ADMIN')"  >
                 <form method="post" th:action="@{/routes/details/{id}/approve-route(id=*{id})}">
                     <input type="hidden" name = "isRouteActive" th:value="true" />
-                    <button class = "btn container-fluid">Approve route</button>
+                    <button class = "btn container-fluid" th:if="${route.getActive()==false}">Approve route</button>
+                </form>
+            </div>
+
+            <div sec:authorize="hasRole('ROLE_ADMIN')"  >
+                <form method="post" th:action="@{/routes/details/{id}/delete(id=*{id})}">
+                    <input type="hidden" name = "isDeleted" th:value="true" />
+                    <button class = "btn container-fluid" th:if="${route.getActive()==true}">Delete route</button>
                 </form>
             </div>
         </section>

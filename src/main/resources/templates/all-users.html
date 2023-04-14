@@ -40,7 +40,12 @@
             <div>
               <form method="post" th:action="@{/all-users/{id}(id=*{id})}">
                 <input type="hidden" name = "isRouteActive" th:value="true" />
-                <button class = "btn container-fluid">Approve user</button>
+                <button class = "btn container-fluid" th:if="${user.getActive() == false}">Approve user</button>
+              </form>
+
+              <form method="post" th:action="@{/all-users/{id}/delete(id=*{id})}" th:if="${user.getId()} != ${principalId}">
+                <input type="hidden" name = "isRouteActive" th:value="true" />
+                <button class = "btn container-fluid" th:if="${user.getActive() == true}">Deactivate user</button>
               </form>
 <!--              <a class="bg-secondary p-1 px-4 rounded text-white" href="/">Back</a>-->
             </div>

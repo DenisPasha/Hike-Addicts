@@ -105,6 +105,7 @@ public class RoutesService {
         detailsView.setVideoUrl(route.getVideoUrl());
         detailsView.setId(route.getId());
         detailsView.setName(route.getName());
+        detailsView.setActive(route.isActive());
         return detailsView;
     }
 
@@ -163,5 +164,9 @@ public class RoutesService {
     public void deleteNotApprovedRoutes(){
         this.routeRepository.findAll().stream().filter(route -> !route.isActive())
                 .forEachOrdered(routeRepository::delete);
+    }
+
+    public void deleteRoute(Long id) {
+        routeRepository.delete(routeRepository.findById(id).get());
     }
 }

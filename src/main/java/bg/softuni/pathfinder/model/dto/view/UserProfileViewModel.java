@@ -8,7 +8,18 @@ public class UserProfileViewModel {
     private String fullName;
     private Integer age;
 
+    private Boolean isActive;
+
+
     public UserProfileViewModel() {
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
     public Long getId() {

@@ -32,7 +32,7 @@ public class UserService {
     public void save(UserRegisterServiceModel userServiceModel) {
         userServiceModel.setLevel(Level.BEGINNER);
         User userEntity = modelMapper.map(userServiceModel, User.class);
-        userEntity.setApproved(false);
+        userEntity.setActive(false);
         userRepository.save(userEntity);
     }
 
@@ -66,13 +66,19 @@ public class UserService {
 
     public void approveUser(Long id) {
         User user = userRepository.findById(id).get();
-                user.setApproved(true);
+                user.setActive(true);
                 userRepository.save(user);
     }
 
     @Scheduled(fixedDelay = 86400000 )
     public void removeNotApprovedUsers(){
-        userRepository.findAll().stream().filter(user -> !user.getApproved()).forEach(
+        userRepository.findAll().stream().filter(user -> !user.getActive()).forEach(
                 userRepository::delete);
+    }
+
+    public void deactivateUser(Long id) {
+        User user = userRepository.findById(id).get();
+        user.setActive(false);
+        userRepository.save(user);
     }
 }

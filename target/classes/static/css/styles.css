@@ -381,3 +381,7 @@ body {
 .rounded-right{
     border-bottom-right-radius: 2rem!important;
 }
+
+.custom_padding{
+    padding: 20px;
+}

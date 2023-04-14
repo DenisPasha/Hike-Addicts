@@ -1,12 +1,22 @@
 package bg.softuni.pathfinder.model.dto.view;
 
 public class UserProfileViewModel {
+
+    private Long id;
     private String username;
     private String level;
     private String fullName;
     private Integer age;
 
     public UserProfileViewModel() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {

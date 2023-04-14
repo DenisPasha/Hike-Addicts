@@ -11,6 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.thymeleaf.model.IModel;
+
 import java.security.Principal;
 import java.util.List;
 
@@ -89,6 +93,19 @@ public class PagesController {
         return "car";
     }
 
+    @GetMapping("all-users")
+    public String getAllUsers(Model model){
+        model.addAttribute("users" , userService.getAllUsers() );
+        return "all-users";
+    }
+
+    @PostMapping("all-users/{id}")
+    public String approveUser(@PathVariable Long id){
+        userService.approveUser(id);
+        return "redirect:/";
+    }
+
+    //todo make a approve button to hide if its approved
 
     //todo fix map
 

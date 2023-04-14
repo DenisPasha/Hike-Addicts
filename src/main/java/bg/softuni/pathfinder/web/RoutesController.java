@@ -13,9 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -84,10 +82,11 @@ public class RoutesController {
         return "route-details";
     }
     @GetMapping("/routes")
-    public String getAllRoutes(Model model){
+    public String getAllRoutes(Model model , Principal principal){
 
         List<RoutesView> allRoutes = routesService.getAllRoutes();
         model.addAttribute("routes",allRoutes);
+        model.addAttribute("user",principal);
         return "routes";
     }
     @PostMapping("/add-route")
@@ -102,6 +101,15 @@ public class RoutesController {
         return "redirect:/routes";
     }
 
+    @PostMapping("/routes/details/{id}/approve-route")
+    public String approveRoute(Model model , boolean isRouteActive, @PathVariable Long id){
+        if (!model.containsAttribute("isRouteActive")){
+            model.addAttribute("isRouteActive",isRouteActive);
+        }
+        routesService.setRouteApproved(id , isRouteActive );
+        // todo make a call to the db to approve the route
+        return "index";
+    }
 
 
     private ImageAddBinding mapToPicture(Long id, MultipartFile picture, Principal principal) throws IOException {

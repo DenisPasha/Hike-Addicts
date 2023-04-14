@@ -8,8 +8,12 @@ import bg.softuni.pathfinder.model.entities.enums.Level;
 import bg.softuni.pathfinder.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
- 
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 public class UserService {
@@ -28,6 +32,7 @@ public class UserService {
     public void save(UserRegisterServiceModel userServiceModel) {
         userServiceModel.setLevel(Level.BEGINNER);
         User userEntity = modelMapper.map(userServiceModel, User.class);
+        userEntity.setApproved(false);
         userRepository.save(userEntity);
     }
 
@@ -50,4 +55,24 @@ public class UserService {
     }
 
 
+    public List<UserProfileViewModel> getAllUsers() {
+
+        List<UserProfileViewModel> usersToReturn = new ArrayList<>();
+        for (User user : userRepository.findAll()) {
+           usersToReturn.add( modelMapper.map(user , UserProfileViewModel.class) );
+        }
+        return usersToReturn;
+    }
+
+    public void approveUser(Long id) {
+        User user = userRepository.findById(id).get();
+                user.setApproved(true);
+                userRepository.save(user);
+    }
+
+    @Scheduled(fixedDelay = 86400000 )
+    public void removeNotApprovedUsers(){
+        userRepository.findAll().stream().filter(user -> !user.getApproved()).forEach(
+                userRepository::delete);
+    }
 }

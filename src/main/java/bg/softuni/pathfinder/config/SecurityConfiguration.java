@@ -31,6 +31,7 @@ public class SecurityConfiguration {
                 .antMatchers("/admins").hasRole(UserRoles.ADMIN.name())
                 .antMatchers("/users/logout" , "/users/profile").authenticated()
                 .antMatchers("/add-route").authenticated()
+                .antMatchers("/routes/details/**/approve-route").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()

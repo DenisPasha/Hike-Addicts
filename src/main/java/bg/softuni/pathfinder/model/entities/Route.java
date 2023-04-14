@@ -32,14 +32,21 @@ public class Route {
 
     private String videoUrl;
 
-    @OneToMany(mappedBy = "route", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "route", fetch = FetchType.EAGER ,cascade = CascadeType.ALL)
     private Set<Picture> pictures;
 
     @Enumerated(EnumType.STRING)
     private RouteCategory categorie;
 
+    private boolean isActive ;
 
+    public boolean isActive() {
+        return isActive;
+    }
 
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 
     public long getId() {
         return id;

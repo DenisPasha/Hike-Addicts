@@ -160,9 +160,21 @@
                     </div>
                 </div>
             </div>
+
+            <div sec:authorize="hasRole('ROLE_ADMIN')"  >
+                <form method="post" th:action="@{/routes/details/{id}/approve-route(id=*{id})}">
+                    <input type="hidden" name = "isRouteActive" th:value="true" />
+                    <button class = "btn container-fluid">Approve route</button>
+                </form>
+            </div>
         </section>
+
+
         <p style="visibility: hidden">GPX Download: <a id="gpxDownload"></a></p>
+
     </div>
+
+
 
 </div>
 <footer th:replace="fragments/footer"></footer>

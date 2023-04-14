@@ -1,10 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Admins</title>
-</head>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head"></head>
+
 <body>
-<h1>This is admins page</h1>
+<header th:replace="fragments/header"></header>
+
+<main class="p-5 align-content-center bg-blur my-register-div">
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-7">
+                <div class="profile-card p-3 py-4" >
+                    <h4 class = "text-center">Approve users</h4>
+                    <div class="text-center">
+                        <img src="/images/profile.jpg" width="300" class="rounded-circle">
+                    </div>
+                    <div class = "row d-flex justify-content-center">
+                        <a th:href="@{/all-users}" class="text-primary ">Navigate to users</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-7">
+                <div class="profile-card p-3 py-4" >
+                    <h4 class = "text-center">Approve routes</h4>
+                    <div class="text-center">
+                        <img src="/images/amazing-routes.jpg" width="350" class="rounded-circle">
+                    </div>
+                    <div class = "row d-flex justify-content-center">
+                        <a th:href="@{/routes}" class="text-primary ">Navigate to routes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
+<footer th:replace="fragments/footer"></footer>
 </html>

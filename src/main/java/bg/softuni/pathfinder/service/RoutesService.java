@@ -14,6 +14,7 @@ import bg.softuni.pathfinder.repository.RouteRepository;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -59,7 +60,7 @@ public class RoutesService {
 
         Route route = modelMapper.map(routeAddBinding, Route.class);
         route.setAuthorId(userByUserName.getId());
-
+        route.setActive(false);
         routeRepository.save(route);
         savePicture(routeAddBinding, userByUserName, route);
     }
@@ -149,5 +150,18 @@ public class RoutesService {
 
     public List<RoutesView> getAllCarRoutes() {
         return getAllPedestrianRoutes( routeRepository.findByCategorie(RouteCategory.CAR));
+    }
+
+    public void setRouteApproved(Long id, boolean isRouteActive) {
+        Route route = routeRepository.findById(id).get();
+        route.setActive(true);
+        routeRepository.save(route);
+    }
+
+
+    @Scheduled(fixedDelay = 86400000)
+    public void deleteNotApprovedRoutes(){
+        this.routeRepository.findAll().stream().filter(route -> !route.isActive())
+                .forEachOrdered(routeRepository::delete);
     }
 }

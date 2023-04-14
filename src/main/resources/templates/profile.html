@@ -11,7 +11,9 @@
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
                 <div class="profile-card p-3 py-4" th:object="${user}">
-                    <div class="text-center"><img src="/images/profile.jpg" width="100" class="rounded-circle"></div>
+                    <div class="text-center">
+                        <img src="/images/profile.jpg" width="100" class="rounded-circle">
+                    </div>
                     <div class="text-center mt-3">
 
                         <span class="bg-secondary p-1 px-4 rounded text-white" th:text="*{level}">Pro</span>

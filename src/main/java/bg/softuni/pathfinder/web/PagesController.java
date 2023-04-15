@@ -96,7 +96,8 @@ public class PagesController {
     @GetMapping("all-users")
     public String getAllUsers(Model model ,Principal principal){
         model.addAttribute("principalId" , userService.getUserByUserName(principal.getName()).getId());
-        model.addAttribute("users" , userService.getAllUsers() );
+        model.addAttribute("approvedUsers" , userService.getAllApprovedUsers() );
+        model.addAttribute("notApprovedUsers" , userService.getAllNotApprovedUsers() );
         return "all-users";
     }
 

@@ -19,7 +19,8 @@ public interface RouteRepository extends JpaRepository<Route, Long> {
     @Query(value = "select r from Route r join Comments c on r.id = c.routeId GROUP BY c.routeId ORDER BY COUNT(c.routeId) desc")
     List<Route> findByRouteCount(Pageable pageable);
 
-
+    @Query("select r from Route r where r.isActive = false ")
+    List<Route> findByIsActive();
 
     List<Route>findByCategorie(RouteCategory categorie);
 }

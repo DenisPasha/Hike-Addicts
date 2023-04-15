@@ -70,7 +70,8 @@ public class UserService {
                 userRepository.save(user);
     }
 
-    @Scheduled(fixedDelay = 86400000 )
+    //cron expression every day at midnight 00:00
+    @Scheduled(cron = "0 0 0 * * *")
     public void removeNotApprovedUsers(){
         userRepository.findAll().stream().filter(user -> !user.getActive()).forEach(
                 userRepository::delete);
@@ -80,5 +81,25 @@ public class UserService {
         User user = userRepository.findById(id).get();
         user.setActive(false);
         userRepository.save(user);
+    }
+
+    public List<UserProfileViewModel> getAllApprovedUsers() {
+        List<UserProfileViewModel> toReturn = new ArrayList<>();
+         for (User user : this.userRepository.findAllApprovedUsers() ) {
+            UserProfileViewModel map = modelMapper.map(user, UserProfileViewModel.class);
+            toReturn.add(map);
+        }
+         return toReturn;
+
+    }
+
+    public List<UserProfileViewModel> getAllNotApprovedUsers() {
+        List<UserProfileViewModel> toReturn = new ArrayList<>();
+        for (User user : this.userRepository.findAllNotApprovedUsers() ) {
+            UserProfileViewModel map = modelMapper.map(user, UserProfileViewModel.class);
+            toReturn.add(map);
+        }
+        return toReturn;
+
     }
 }

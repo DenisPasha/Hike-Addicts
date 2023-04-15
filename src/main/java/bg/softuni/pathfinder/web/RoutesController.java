@@ -89,6 +89,17 @@ public class RoutesController {
         model.addAttribute("user",principal);
         return "routes";
     }
+
+    @GetMapping("/routes-to-approve")
+    public String routeToApprove(Model model , Principal principal){
+        List<RouteDetailsView> allRoutes = routesService.getAllRoutesToBeApproved();
+        model.addAttribute("routes",allRoutes);
+        model.addAttribute("user",principal);
+
+        //toto check if its fetching only routes to be approved
+
+        return "routes";
+    }
     @PostMapping("/add-route")
     public String postAddRoute(@Valid RouteAddBinding routeAddBinding , BindingResult bindingResult , RedirectAttributes redirectAttributes, Principal principal) throws IOException {
 
@@ -108,7 +119,7 @@ public class RoutesController {
         }
         routesService.setRouteApproved(id , isRouteActive );
         // todo make a call to the db to approve the route
-        return "redirect:/routes";
+        return "redirect:";
     }
 
     @PostMapping("/routes/details/{id}/delete")
@@ -116,6 +127,8 @@ public class RoutesController {
         routesService.deleteRoute(id);
         return "redirect:/routes";
     }
+
+
 
 
     private ImageAddBinding mapToPicture(Long id, MultipartFile picture, Principal principal) throws IOException {

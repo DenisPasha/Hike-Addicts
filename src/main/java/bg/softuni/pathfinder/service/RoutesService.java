@@ -160,7 +160,8 @@ public class RoutesService {
     }
 
 
-    @Scheduled(fixedDelay = 86400000)
+    //cron expression every day at midnight 00:00
+    @Scheduled(cron = "0 0 0 * * *")
     public void deleteNotApprovedRoutes(){
         this.routeRepository.findAll().stream().filter(route -> !route.isActive())
                 .forEachOrdered(routeRepository::delete);
@@ -168,5 +169,17 @@ public class RoutesService {
 
     public void deleteRoute(Long id) {
         routeRepository.delete(routeRepository.findById(id).get());
+    }
+
+    public List<RouteDetailsView> getAllRoutesToBeApproved() {
+        Boolean active = false;
+        List<Route> allByActive = this.routeRepository.findByIsActive();
+        List<RouteDetailsView> routes = new ArrayList<>();
+
+        for (Route route : allByActive) {
+            RouteDetailsView map = modelMapper.map(route, RouteDetailsView.class);
+            routes.add(map);
+        }
+        return routes;
     }
 }

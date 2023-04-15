@@ -31,5 +31,14 @@ spring:
         format_sql: true
     defer-datasource-initialization: true
 
+mail:
+  host: "localhost"
+  port: 1025
+  username: "hike@addict.com"
+  password: ""
+
+
+
+
 
 

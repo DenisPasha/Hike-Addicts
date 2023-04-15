@@ -8,6 +8,8 @@ import bg.softuni.pathfinder.model.entities.enums.Level;
 import bg.softuni.pathfinder.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -26,20 +28,11 @@ public class UserService {
     public UserService(UserRepository userRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
-
     }
 
-    public void save(UserRegisterServiceModel userServiceModel) {
-        userServiceModel.setLevel(Level.BEGINNER);
-        User userEntity = modelMapper.map(userServiceModel, User.class);
-        userEntity.setActive(false);
-        userRepository.save(userEntity);
-    }
 
     public UserProfileViewModel getUserProfileViewByUsername(String username) {
         return modelMapper.map(userRepository.findByUsername(username).orElse(null), UserProfileViewModel.class);
-
-
     }
 
     public User getUserByUserName(String username) {

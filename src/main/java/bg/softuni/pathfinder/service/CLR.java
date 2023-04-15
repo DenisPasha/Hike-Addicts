@@ -52,6 +52,7 @@ public class CLR implements CommandLineRunner {
         admin.setPassword(passwordEncoder.encode("admin"));
         admin.setRoles(Set.of(adminRole));
         admin.setActive(true);
+        admin.setAccountConfirmed(true);
 
         userRepository.save(admin);
     }

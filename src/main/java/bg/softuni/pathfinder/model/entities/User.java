@@ -36,6 +36,8 @@ public class User implements Serializable {
 
     private Boolean isActive;
 
+    private Boolean accountConfirmed;
+
     public User() {
 
     }
@@ -119,6 +121,14 @@ public class User implements Serializable {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Boolean getAccountConfirmed() {
+        return accountConfirmed;
+    }
+
+    public void setAccountConfirmed(Boolean accountConfirmed) {
+        this.accountConfirmed = accountConfirmed;
     }
 
     @Override

@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.thymeleaf.model.IModel;
 
 import java.security.Principal;
@@ -93,13 +94,32 @@ public class PagesController {
         return "car";
     }
 
-    @GetMapping("all-users")
-    public String getAllUsers(Model model ,Principal principal){
+    @GetMapping("/all-users")
+    public String getAllUsers(){
+        return "all-users";
+    }
+
+    @PostMapping("/all-users/approved")
+    public String getAllApprovedUsers(Model model , Principal principal ,boolean onlyApproved ){
+
+        if (!model.containsAttribute("onlyApproved")){
+            model.addAttribute("onlyApproved" , onlyApproved);
+        }
         model.addAttribute("principalId" , userService.getUserByUserName(principal.getName()).getId());
         model.addAttribute("approvedUsers" , userService.getAllApprovedUsers() );
+        return "all-users";
+    }
+
+    @PostMapping("/all-users/for-approving")
+    public String getAllNotApprovedUsers(Model model ,boolean notApproved ){
+
+        if (!model.containsAttribute("notApproved")){
+            model.addAttribute("notApproved" , notApproved);
+        }
         model.addAttribute("notApprovedUsers" , userService.getAllNotApprovedUsers() );
         return "all-users";
     }
+
 
     @PostMapping("all-users/{id}")
     public String approveUser(@PathVariable Long id){

@@ -385,3 +385,8 @@ body {
 .custom_padding{
     padding: 20px;
 }
+
+.custom_image{
+    margin-left: 16rem;
+    margin-bottom: 1rem;
+}

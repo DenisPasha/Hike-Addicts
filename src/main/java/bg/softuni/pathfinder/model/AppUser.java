@@ -9,6 +9,7 @@ public class AppUser extends User {
 
     private String fullName;
 
+
     public AppUser(String username, String password, Collection<? extends GrantedAuthority> authorities, String fullName) {
         super(username, password, authorities);
         this.fullName = fullName;
@@ -21,4 +22,5 @@ public class AppUser extends User {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
+
 }

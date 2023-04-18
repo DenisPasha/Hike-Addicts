@@ -3,7 +3,6 @@ spring:
     mode: HTML5
 
   datasource:
-
     driverClassName: com.mysql.cj.jdbc.Driver
   #  change localhost with database-container to use it in docker
     url: "jdbc:mysql://localhost:3306/hikeAddicts?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8"
@@ -32,13 +31,18 @@ spring:
     defer-datasource-initialization: true
 
 mail:
-  host: "my-mailhog"
+  # raplace localhost with my-mailhog   mailhog container name
+  host: "localhost"
   port: 1025
   username: "hike@addict.com"
   password: ""
 
-
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - prometheus
 
 
 

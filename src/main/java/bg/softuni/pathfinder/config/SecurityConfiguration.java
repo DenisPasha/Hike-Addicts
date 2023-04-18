@@ -29,6 +29,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests()
                 .antMatchers("/admins").hasRole(UserRoles.ADMIN.name())
+                .antMatchers("/all-users").hasRole(UserRoles.ADMIN.name())
                 .antMatchers("/users/logout" , "/users/profile").authenticated()
                 .antMatchers("/add-route").authenticated()
                 .antMatchers("/routes/details/**/approve-route").hasRole("ADMIN")

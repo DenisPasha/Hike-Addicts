@@ -124,7 +124,8 @@ public class RoutesService {
     }
 
     public List<RoutesView> getAllPedestrianRoutes() {
-        return getAllPedestrianRoutes( routeRepository.findByCategorie(RouteCategory.PEDESTRIAN));
+        List<Route> byCategorie = routeRepository.findByCategorie(RouteCategory.PEDESTRIAN);
+        return getAllPedestrianRoutes( byCategorie );
     }
 
     private List<RoutesView> getAllPedestrianRoutes(List<Route> byCategorie) {

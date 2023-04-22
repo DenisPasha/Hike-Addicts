@@ -1,55 +1,24 @@
 package bg.softuni.pathfinder.web;
-import bg.softuni.pathfinder.model.AppUser;
-import bg.softuni.pathfinder.model.dto.view.RoutesView;
-import bg.softuni.pathfinder.model.entities.Picture;
-import bg.softuni.pathfinder.model.entities.Role;
-import bg.softuni.pathfinder.model.entities.Route;
 import bg.softuni.pathfinder.model.entities.User;
 import bg.softuni.pathfinder.model.entities.enums.Level;
-import bg.softuni.pathfinder.model.entities.enums.RouteCategory;
 import bg.softuni.pathfinder.model.entities.enums.UserRoles;
-import bg.softuni.pathfinder.repository.PictureRepository;
 import bg.softuni.pathfinder.repository.RoleRepository;
-import bg.softuni.pathfinder.repository.RouteRepository;
 import bg.softuni.pathfinder.repository.UserRepository;
-import bg.softuni.pathfinder.service.RoutesService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.lang.annotation.Before;
-import org.junit.experimental.categories.Categories;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.ui.Model;
-
-import java.security.Principal;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;;
 import java.util.Set;
-
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 
 @SpringBootTest
 @AutoConfigureMockMvc
-//@ActiveProfiles("test")
-//@TestPropertySource("classpath:application.yml")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PagesControllerTest {
 
     @Autowired
@@ -62,24 +31,26 @@ public class PagesControllerTest {
 
     private User user = new User();
 
-    @BeforeEach
-    void setUp() {
 
-        user.setUsername("TestingUSer");
+    @BeforeAll
+    public void setUp() {
+        user.setUsername("TestingUser");
         user.setPassword("admin");
         user.setActive(true);
+        user.setId(1);
         user.setRoles(Set.of(roleRepository.findAll().stream().filter(role2 -> role2.getName().equals(UserRoles.ADMIN)).findFirst().get()));
         userRepository.save(user);
-
     }
 
-    @AfterEach
-    void tearDown() {
+
+    @AfterAll
+     public void tearDown() {
         userRepository.delete(user);
     }
 
+
     @Test
-    @WithMockUser(username = "admin" , password = "admin" , roles = {"ADMIN"})
+    @WithMockUser(username = "admin", password = "admin", roles = {"ADMIN"})
     public void testAdminsPage() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/admins"))
@@ -88,10 +59,8 @@ public class PagesControllerTest {
 
 
     @Test
-    @WithMockUser(username = "adminaa" , roles = {"USER"}  )
+    @WithMockUser(username = "TestingUser")
     public void testUsersProfile() throws Exception {
-
-
 
         mockMvc.perform(MockMvcRequestBuilders.get("/users/profile"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("user"))
@@ -108,16 +77,16 @@ public class PagesControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin" , roles = {"ADMIN"})
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void testGetAllUsers_withValidAdminUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/all-users"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("all-users"))
-                ;
+        ;
     }
 
     @Test
-    @WithMockUser(username = "user" ,roles = {"USER"})
+    @WithMockUser(username = "user", roles = {"USER"})
     public void testGetAllUsers_withNormalUser_redirects() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/all-users"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
@@ -125,7 +94,7 @@ public class PagesControllerTest {
 
 
     @Test
-    @WithMockUser(username = "testUser" , roles = {"USER"} )
+    @WithMockUser(username = "testUser", roles = {"USER"})
     public void testHomePage_withLoggedInUser_valid() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/"))
@@ -171,7 +140,7 @@ public class PagesControllerTest {
 
 
     @Test
-    @WithMockUser( username = "admina" , roles = {"ADMIN"})
+    @WithMockUser(username = "admina", roles = {"ADMIN"})
     public void getAllApprovedUsers_withValidLoggedInAdmin_status200() throws Exception {
 
         User user = new User();
@@ -184,8 +153,8 @@ public class PagesControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/all-users/approved")
                         .with(csrf())
-                        .param("onlyApproved" , String.valueOf(true))
-                        )
+                        .param("onlyApproved", String.valueOf(true))
+                )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attributeExists("onlyApproved"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("approvedUsers"))
@@ -194,9 +163,8 @@ public class PagesControllerTest {
     }
 
 
-
     @Test
-    @WithMockUser( username = "test" , roles = {"ADMIN"})
+    @WithMockUser(username = "test", roles = {"ADMIN"})
     public void getAllUsersForApprove_withValidLoggedInAdmin_status200() throws Exception {
 
         User user = new User();
@@ -209,7 +177,7 @@ public class PagesControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/all-users/for-approving")
                         .with(csrf())
-                        .param("notApproved" , String.valueOf(true))
+                        .param("notApproved", String.valueOf(true))
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attributeExists("notApprovedUsers"))
@@ -219,7 +187,7 @@ public class PagesControllerTest {
 
 
     @Test
-    @WithMockUser(username = "TestUsername" , roles = {"ADMIN"})
+    @WithMockUser(username = "TestUsername", roles = {"ADMIN"})
     public void approveUser_withLoggedInAdmin_valid() throws Exception {
 
         User user = new User();
@@ -231,14 +199,14 @@ public class PagesControllerTest {
         userRepository.save(user);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/all-users/1")
-                .param("id" , String.valueOf(1))
-                .with(csrf()))
+                        .param("id", String.valueOf(1))
+                        .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/all-users"));
     }
 
     @Test
-    @WithMockUser(username = "TestUsername" , roles = {"ADMIN"})
+    @WithMockUser(username = "TestUsername", roles = {"ADMIN"})
     public void deleteUser_withLoggedInAdmin_valid() throws Exception {
 
         User user = new User();
@@ -250,15 +218,11 @@ public class PagesControllerTest {
         userRepository.save(user);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/all-users/1/delete")
-                        .param("id" , String.valueOf(1))
+                        .param("id", String.valueOf(1))
                         .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/all-users"));
     }
-
-
-
-
 
 
 }

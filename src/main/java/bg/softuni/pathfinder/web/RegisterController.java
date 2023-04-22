@@ -38,7 +38,6 @@ public class RegisterController {
         if (!model.containsAttribute("userRegistrationBinding")){
             model.addAttribute("userRegistrationBinding",new UserRegistrationBindingModel());
         }
-
         return "register";
     }
 
@@ -64,8 +63,6 @@ public class RegisterController {
     @GetMapping("/users/register/confirm/{token}")
     public String confirmEmail(@PathVariable String token){
         registerService.confirmEmail(token);
-
-
         return "redirect:/";
 
     }

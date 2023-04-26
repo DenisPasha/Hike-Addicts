@@ -112,7 +112,8 @@ public class RoutesService {
     public RouteDetailsView getRouteWithMostComments() {
 
         try {
-            return modelMapper.map(this.routeRepository.findByRouteCount(PageRequest.of(0,1)).get(0), RouteDetailsView.class);
+            return modelMapper.map(this.routeRepository.findByRouteCount(PageRequest.of(0,1))
+                    .get(0), RouteDetailsView.class);
         }catch (Exception e){
             return null;
         }

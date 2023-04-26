@@ -40,7 +40,6 @@ public class RegisterService {
         userEntity.setAccountConfirmed(false);
         userRepository.save(userEntity);
 
-
         emailService.sendSimpleMail(userEntity.getEmail() , userEntity.getFullName() , userEntity);
 
     }

@@ -140,7 +140,7 @@ public class RoutesControllerTest {
 
 
     @Test
-    @WithMockUser(username = "Test")
+    @WithMockUser(username = "TestingUser")
     public void getSpecificRouteDetails_statusOk() throws Exception {
 
 

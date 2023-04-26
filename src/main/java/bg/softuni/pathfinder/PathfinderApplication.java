@@ -13,9 +13,5 @@ public class PathfinderApplication {
         SpringApplication.run(PathfinderApplication.class, args);
     }
 
-    public void a() {
-
-
-    }
 
 }

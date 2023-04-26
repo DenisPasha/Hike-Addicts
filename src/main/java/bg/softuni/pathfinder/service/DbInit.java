@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-public class CLR implements CommandLineRunner {
+public class DbInit implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    public CLR(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DbInit(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -33,6 +33,7 @@ public class CLR implements CommandLineRunner {
             initRoles();
             initAdminUser();
         }
+
 
     }
 

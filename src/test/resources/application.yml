@@ -8,9 +8,10 @@ spring:
     hibernate:
       ddl-auto: create-drop
     database-platform: org.hibernate.dialect.HSQLDialect
+
 mail:
   # raplace localhost with my-mailhog   mailhog container name
-  host: "localhost"
+  host: "maihog"
   port: 1025
   username: "hike@addict.com"
   password: ""

@@ -59,13 +59,24 @@ public class PagesControllerTest {
 
 
     @Test
-    @WithMockUser(username = "TestingUser")
+    @WithMockUser(username = "currentUser")
     public void testUsersProfile() throws Exception {
+
+        User user1 = new User();
+        user1.setUsername("currentUser");
+        user1.setLevel(Level.BEGINNER);
+        user1.setPassword("1111111");
+        user1.setAccountConfirmed(false);
+        user1.setRoles(Set.of());
+
+        userRepository.save(user1);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/users/profile"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("user"))
                 .andExpect(MockMvcResultMatchers.view().name("profile"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+
+        userRepository.delete(user1);
     }
 
     @Test

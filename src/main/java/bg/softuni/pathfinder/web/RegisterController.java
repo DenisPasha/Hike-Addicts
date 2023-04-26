@@ -60,6 +60,8 @@ public class RegisterController {
         return "redirect:/";
     }
 
+
+
     @GetMapping("/users/register/confirm/{token}")
     public String confirmEmail(@PathVariable String token){
         registerService.confirmEmail(token);

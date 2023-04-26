@@ -2,91 +2,150 @@ package bg.softuni.pathfinder.service;
 
 import bg.softuni.pathfinder.model.dto.view.UserProfileViewModel;
 import bg.softuni.pathfinder.model.entities.User;
-import bg.softuni.pathfinder.model.entities.enums.Level;
 import bg.softuni.pathfinder.repository.UserRepository;
-import org.junit.Assert;
+import jdk.dynalink.linker.LinkerServices;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
 class UserServiceTest {
 
-    @Autowired
-    private UserService userService;
+    private  UserRepository userRepository;
+    private  ModelMapper modelMapper;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    private User user;
-
+    private UserService userService ;
     @BeforeEach
     void setUp() {
-        saveTestUser();
+        userRepository = Mockito.mock(UserRepository.class);
+        modelMapper = new ModelMapper();
+        userService = new UserService(userRepository , modelMapper);
     }
 
     @Test
-    public void getUserByUsername(){
-         saveTestUser();
+    public void getUserProfileViewByUsernameTest(){
 
-        User retrievedUser = userService.getUserByUserName("TestUser");
+        User user = new User();
+        user.setUsername("TestUser");
 
-        assertEquals(user.getUsername(), retrievedUser.getUsername());
-        assertEquals(user.getFullName(), retrievedUser.getFullName());
+        when(userRepository.findByUsername("TestUser")).thenReturn(Optional.of(user));
+        UserProfileViewModel testUser = userService.getUserProfileViewByUsername("TestUser");
+
+        assertEquals(user.getUsername() , testUser.getUsername());
     }
-
-
 
     @Test
-    public void getAuthorTest(){
-        saveTestUser();
-        UserProfileViewModel author = userService.getAuthor(1L);
-        assertEquals(author.getUsername() , user.getUsername());
+    public void getUserByUserNameTest(){
+        User user = new User();
+        user.setUsername("testUser");
+
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
+        User testUser = userService.getUserByUserName("testUser");
+        assertEquals(user , testUser);
     }
+
 
     @Test
     public void getAllUsersTest(){
+        User user = new User();
+        user.setId(1);
+        user.setUsername("user 1");
 
-        User user1 = new User();
-        user1.setId(2);
-        user1.setLevel(Level.BEGINNER);
-        user1.setRoles(Set.of());
-        user1.setAge(21);
-        user1.setUsername("username");
-        user1.setAccountConfirmed(false);
-        user1.setFullName("fullName");
-        user1.setPassword("21212");
+        User user2 = new User();
+        user2.setId(2);
+        user2.setUsername("user 2");
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        users.add(user2);
 
+        when(userRepository.findAll()).thenReturn(users);
         List<UserProfileViewModel> allUsers = userService.getAllUsers();
-        assertEquals(1 , allUsers.size());
-        userRepository.save(user1);
-        List<UserProfileViewModel> allUsers1 = userService.getAllUsers();
-        assertEquals(2 , allUsers1.size());
 
+        assertEquals(users.size() , allUsers.size());
+        assertEquals(users.get(0).getUsername() , allUsers.get(0).getUsername());
+        assertEquals(users.get(1).getUsername() , allUsers.get(1).getUsername());
     }
 
 
-
-    private void saveTestUser() {
-        user = new User();
+    @Test
+    public void approveUserTest(){
+        User user = new User();
+        user.setActive(false);
+        user.setUsername("test");
         user.setId(1L);
-        user.setUsername("TestUser");
-        user.setPassword("1111111");
-        user.setActive(true);
-        user.setAge(21);
-        user.setEmail("testUser@abv.bg");
-        user.setRoles(Set.of());
-        user.setFullName("user");
-        user.setAccountConfirmed(false);
 
-        user = userRepository.save(user);
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        assertFalse(user.getActive());
+        userService.approveUser(1L);
+        assertTrue(user.getActive());
     }
+
+    @Test
+    public void removeNotApprovedUsersTest(){
+        User notApproved1 = new User();
+        notApproved1.setActive(false);
+
+        User notApproved2 = new User();
+        notApproved2.setActive(false);
+
+        User approved1 = new User();
+        approved1.setActive(true);
+
+        List<User>users = new ArrayList<>();
+        users.add(notApproved1);
+        users.add(notApproved2);
+        users.add(approved1);
+
+        when(userRepository.findAll()).thenReturn(users);
+
+        userService.removeNotApprovedUsers();
+        verify(userRepository, times(2)).delete(any(User.class));
+
+    }
+
+    @Test
+    public void deactivateUserTest(){
+        User approved = new User();
+        approved.setActive(true);
+
+        when(userRepository.findById(any())).thenReturn(Optional.of(approved));
+
+        userService.deactivateUser(1L);
+        verify(userRepository).save(approved);
+        assertFalse(approved.getActive());
+    }
+
+    @Test
+    public void getAllApprovedUsersTest(){
+        User approved1 = new User();
+        approved1.setActive(true);
+
+        User approved2 = new User();
+        approved2.setActive(true);
+
+        User notApproved = new User();
+        notApproved.setActive(false);
+
+        List<User>users = new ArrayList<>();
+        users.add(approved1);
+        users.add(approved2);
+        users.add(notApproved);
+
+        List<User> approvedUsers = users.stream().filter(user -> user.getActive()).collect(Collectors.toList());
+        when(userRepository.findAllApprovedUsers()).thenReturn(approvedUsers);
+        List<UserProfileViewModel> allApprovedUsers = userService.getAllApprovedUsers();
+
+        assertEquals(2 ,allApprovedUsers.size());
+
+    }
+
 }

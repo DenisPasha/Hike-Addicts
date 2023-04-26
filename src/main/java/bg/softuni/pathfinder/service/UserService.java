@@ -41,7 +41,7 @@ public class UserService {
 
     public UserProfileViewModel getAuthor(Long authorId) {
 
-        User user = userRepository.findById(authorId).get();
+        User user = userRepository.findById(authorId).orElse(null);
         UserProfileViewModel maps = modelMapper.map(user, UserProfileViewModel.class);
 
         return maps;
@@ -66,7 +66,8 @@ public class UserService {
     //cron expression every day at midnight 00:00
     @Scheduled(cron = "0 0 0 * * *")
     public void removeNotApprovedUsers(){
-        userRepository.findAll().stream().filter(user -> !user.getActive()).forEach(
+        userRepository.findAll()
+                .stream().filter(user -> !user.getActive()).forEach(
                 userRepository::delete);
     }
 

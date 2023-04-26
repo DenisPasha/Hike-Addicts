@@ -126,5 +126,51 @@ class RoutesServiceTest {
         assertEquals(route.getId() , byId.getId());
     }
 
+    @Test
+    public void getAllPedestrianRoutesTest(){
+        Route route = new Route();
+
+        Picture mockPic = getPicture(route);
+
+        route.setPictures(Set.of(mockPic));
+        route.setAuthorId(1L);
+        route.setLevel(Level.BEGINNER);
+        route.setActive(true);
+        route.setName("name");
+        route.setVideoUrl("daa");
+        route.setCategorie(RouteCategory.PEDESTRIAN);
+
+        Route route1 = new Route();
+        route.setPictures(Set.of(mockPic));
+        route.setAuthorId(2L);
+        route.setLevel(Level.ADVANCED);
+        route.setActive(true);
+        route.setName("name pedestrian");
+        route.setVideoUrl("mdmwklq");
+        route.setCategorie(RouteCategory.PEDESTRIAN);
+
+        List<Route>pedestrianRoutes = new ArrayList<>();
+        pedestrianRoutes.add(route);
+        pedestrianRoutes.add(route1);
+
+        when(routeRepository.findByCategorie(RouteCategory.PEDESTRIAN)).thenReturn(pedestrianRoutes);
+        when(pictureService.getPicture(any())).thenReturn(mockPic);
+
+        List<RoutesView> allPedestrianRoutes = routesService.getAllPedestrianRoutes();
+
+        assertEquals(pedestrianRoutes.size() , allPedestrianRoutes.size());
+
+    }
+
+    private static Picture getPicture(Route route) {
+        Picture mockPic = new Picture();
+        mockPic.setContentType("jpeg");
+        mockPic.setRoute(route);
+        mockPic.setTitle("title");
+        mockPic.setAuthor(new User());
+        mockPic.setId(1);
+        mockPic.setImage(new byte[] {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09});
+        return mockPic;
+    }
 
 }

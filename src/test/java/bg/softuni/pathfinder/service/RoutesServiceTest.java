@@ -3,33 +3,28 @@ package bg.softuni.pathfinder.service;
 import bg.softuni.pathfinder.model.dto.binding.RouteAddBinding;
 import bg.softuni.pathfinder.model.dto.view.RouteDetailsView;
 import bg.softuni.pathfinder.model.dto.view.RoutesView;
-import bg.softuni.pathfinder.model.entities.Comments;
 import bg.softuni.pathfinder.model.entities.Picture;
 import bg.softuni.pathfinder.model.entities.Route;
 import bg.softuni.pathfinder.model.entities.User;
 import bg.softuni.pathfinder.model.entities.enums.Level;
 import bg.softuni.pathfinder.model.entities.enums.RouteCategory;
 import bg.softuni.pathfinder.repository.RouteRepository;
-import jdk.dynalink.linker.LinkerServices;
-import org.junit.Before;
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class RoutesServiceTest {
-
 
 
     private  RouteRepository routeRepository;
@@ -127,7 +122,7 @@ class RoutesServiceTest {
     }
 
     @Test
-    public void getAllPedestrianRoutesTest(){
+    public void getAllRoutesByCategoryTest(){
         Route route = new Route();
 
         Picture mockPic = getPicture(route);
@@ -156,9 +151,187 @@ class RoutesServiceTest {
         when(routeRepository.findByCategorie(RouteCategory.PEDESTRIAN)).thenReturn(pedestrianRoutes);
         when(pictureService.getPicture(any())).thenReturn(mockPic);
 
-        List<RoutesView> allPedestrianRoutes = routesService.getAllPedestrianRoutes();
+        List<RoutesView> allPedestrianRoutes = routesService.getRoutesByCategory();
 
         assertEquals(pedestrianRoutes.size() , allPedestrianRoutes.size());
+
+    }
+
+    @Test
+    public void getAllPedestrianRoutesTest(){
+
+        Route route = new Route();
+        Picture mockPic = getPicture(route);
+        route.setPictures(Set.of(mockPic));
+        route.setAuthorId(2L);
+        route.setLevel(Level.ADVANCED);
+        route.setActive(true);
+        route.setName("name pedestrian");
+        route.setVideoUrl("mdmwklq");
+        route.setCategorie(RouteCategory.PEDESTRIAN);
+
+        when(routeRepository.findByCategorie(RouteCategory.PEDESTRIAN)).thenReturn(List.of( route ));
+        when(pictureService.getPicture(any())).thenReturn(mockPic);
+
+        List<RoutesView> allPedestrianRoutes = routesService.getAllPedestrianRoutes();
+        assertEquals(1 ,allPedestrianRoutes.size());
+    }
+
+
+    @Test
+    public void getAllBicycleRoutesTest(){
+
+        Route route = new Route();
+        Picture mockPic = getPicture(route);
+        route.setPictures(Set.of(mockPic));
+        route.setAuthorId(2L);
+        route.setLevel(Level.ADVANCED);
+        route.setActive(true);
+        route.setName("name pedestrian");
+        route.setVideoUrl("mdmwklq");
+        route.setCategorie(RouteCategory.BICYCLE);
+
+        when(routeRepository.findByCategorie(RouteCategory.BICYCLE)).thenReturn(List.of( route ));
+        when(pictureService.getPicture(any())).thenReturn(mockPic);
+
+        List<RoutesView> allRoutes = routesService.getAllBicycleRoutes();
+        assertEquals(1 ,allRoutes.size());
+    }
+
+
+    @Test
+    public void getAllMotorcycleRoutesTest(){
+
+        Route route = new Route();
+        Picture mockPic = getPicture(route);
+        route.setPictures(Set.of(mockPic));
+        route.setAuthorId(2L);
+        route.setLevel(Level.ADVANCED);
+        route.setActive(true);
+        route.setName("name pedestrian");
+        route.setVideoUrl("mdmwklq");
+        route.setCategorie(RouteCategory.MOTORCYCLE);
+
+        when(routeRepository.findByCategorie(RouteCategory.MOTORCYCLE)).thenReturn(List.of( route ));
+        when(pictureService.getPicture(any())).thenReturn(mockPic);
+
+        List<RoutesView> allRoutes = routesService.getAllMotorcycleRoutes();
+        assertEquals(1 ,allRoutes.size());
+    }
+
+    @Test
+    public void getAllCarRoutesTest(){
+
+        Route route = new Route();
+        Picture mockPic = getPicture(route);
+        route.setPictures(Set.of(mockPic));
+        route.setAuthorId(2L);
+        route.setLevel(Level.ADVANCED);
+        route.setActive(true);
+        route.setName("name pedestrian");
+        route.setVideoUrl("mdmwklq");
+        route.setCategorie(RouteCategory.CAR);
+
+        when(routeRepository.findByCategorie(RouteCategory.CAR)).thenReturn(List.of( route ));
+        when(pictureService.getPicture(any())).thenReturn(mockPic);
+
+        List<RoutesView> allRoutes = routesService.getAllCarRoutes();
+        assertEquals(1 ,allRoutes.size());
+    }
+
+    @Test
+    public void setRouteApprovedTest() {
+        Route route = new Route();
+        Picture mockPic = getPicture(route);
+        route.setPictures(Set.of(mockPic));
+        route.setAuthorId(2L);
+        route.setLevel(Level.ADVANCED);
+        route.setActive(false);
+        route.setName("name pedestrian");
+        route.setVideoUrl("mdmwklq");
+        route.setCategorie(RouteCategory.CAR);
+
+
+        when(routeRepository.findById(any())).thenReturn(Optional.of(route));
+        routesService.setRouteApproved(2L, false);
+        verify(routeRepository).save(route);
+        ArgumentCaptor<Route> captor = ArgumentCaptor.forClass(Route.class);
+        verify(routeRepository).save(captor.capture());
+        Route value = captor.getValue();
+        assertThat(value.isActive()).isTrue();
+
+    }
+
+    @Test
+    public void deleteNotApprovedRoutesTest(){
+        Route route = new Route();
+        route.setActive(false);
+        route.setName("test");
+        route.setPictures(Set.of());
+        route.setLevel(Level.BEGINNER);
+
+        Route route1 = new Route();
+        route.setActive(false);
+        route.setName("test");
+        route.setPictures(Set.of());
+        route.setLevel(Level.BEGINNER);
+
+        List<Route> routes = new ArrayList<>();
+        routes.add(route);
+        routes.add(route1);
+
+        when(routeRepository.findAll()).thenReturn(routes);
+        routesService.deleteNotApprovedRoutes();
+        verify(routeRepository , times(2)).delete(any());
+
+    }
+
+
+    @Test
+    public void deleteRouteTest(){
+        Route route = new Route();
+        route.setActive(false);
+        route.setName("test");
+        route.setPictures(Set.of());
+        route.setLevel(Level.BEGINNER);
+        route.setId(1);
+        route.setAuthorId(2L);
+
+        when(routeRepository.findById(any())).thenReturn(Optional.of(route));
+        routesService.deleteRoute(1L);
+        verify(routeRepository).delete(route);
+    }
+
+    @Test
+    public void getAllRoutesToBeApprovedTest(){
+        Route route = new Route();
+        route.setActive(false);
+        route.setName("test");
+        route.setPictures(Set.of());
+        route.setLevel(Level.BEGINNER);
+        route.setId(1);
+        route.setAuthorId(2L);
+
+        Route route2 = new Route();
+        route2.setActive(false);
+        route2.setName("test");
+        route2.setPictures(Set.of());
+        route2.setLevel(Level.BEGINNER);
+        route2.setId(2);
+        route2.setAuthorId(2L);
+        List<Route> routes = new ArrayList<>();
+        routes.add(route);
+        routes.add(route2);
+
+        when(routeRepository.findByIsActive()).thenReturn(routes);
+        List<RouteDetailsView> allRoutesToBeApproved = routesService.getAllRoutesToBeApproved();
+
+        assertThat(route.getId()).isEqualTo(allRoutesToBeApproved.get(0).getId());
+        assertThat(route.getName()).isEqualTo(allRoutesToBeApproved.get(0).getName());
+
+        assertThat(route2.getId()).isEqualTo(allRoutesToBeApproved.get(1).getId());
+        assertThat(route2.getName()).isEqualTo(allRoutesToBeApproved.get(1).getName());
+
 
     }
 
@@ -172,5 +345,6 @@ class RoutesServiceTest {
         mockPic.setImage(new byte[] {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09});
         return mockPic;
     }
+
 
 }

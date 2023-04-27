@@ -124,12 +124,12 @@ public class RoutesService {
         return routeRepository.findById(id).get();
     }
 
-    public List<RoutesView> getAllPedestrianRoutes() {
+    public List<RoutesView> getRoutesByCategory() {
         List<Route> byCategorie = routeRepository.findByCategorie(RouteCategory.PEDESTRIAN);
-        return getAllPedestrianRoutes( byCategorie );
+        return getRoutesByCategory( byCategorie );
     }
 
-    private List<RoutesView> getAllPedestrianRoutes(List<Route> byCategorie) {
+    private List<RoutesView> getRoutesByCategory(List<Route> byCategorie) {
         List<RoutesView> listToReturn = new ArrayList<>();
 
         for (Route route : byCategorie) {
@@ -142,17 +142,19 @@ public class RoutesService {
         return listToReturn;
     }
 
-
+    public List<RoutesView> getAllPedestrianRoutes() {
+        return getRoutesByCategory( routeRepository.findByCategorie(RouteCategory.PEDESTRIAN));
+    }
     public List<RoutesView> getAllBicycleRoutes() {
-        return getAllPedestrianRoutes( routeRepository.findByCategorie(RouteCategory.BICYCLE));
+        return getRoutesByCategory( routeRepository.findByCategorie(RouteCategory.BICYCLE));
     }
 
     public List<RoutesView> getAllMotorcycleRoutes() {
-        return getAllPedestrianRoutes( routeRepository.findByCategorie(RouteCategory.MOTORCYCLE));
+        return getRoutesByCategory( routeRepository.findByCategorie(RouteCategory.MOTORCYCLE));
     }
 
     public List<RoutesView> getAllCarRoutes() {
-        return getAllPedestrianRoutes( routeRepository.findByCategorie(RouteCategory.CAR));
+        return getRoutesByCategory( routeRepository.findByCategorie(RouteCategory.CAR));
     }
 
     public void setRouteApproved(Long id, boolean isRouteActive) {

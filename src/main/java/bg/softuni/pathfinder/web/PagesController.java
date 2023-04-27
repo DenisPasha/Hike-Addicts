@@ -3,7 +3,6 @@ import bg.softuni.pathfinder.model.AppUser;
 import bg.softuni.pathfinder.model.dto.view.RouteDetailsView;
 import bg.softuni.pathfinder.model.dto.view.RoutesView;
 import bg.softuni.pathfinder.model.dto.view.UserProfileViewModel;
-import bg.softuni.pathfinder.model.entities.Route;
 import bg.softuni.pathfinder.service.RoutesService;
 import bg.softuni.pathfinder.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,8 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.thymeleaf.model.IModel;
 
 import java.security.Principal;
 import java.util.List;
@@ -65,7 +62,7 @@ public class PagesController {
     @GetMapping("/pedestrian")
     public String getPedestrian(Model model){
 
-        List<RoutesView> allPedestrianRoutes = routesService.getAllPedestrianRoutes();
+        List<RoutesView> allPedestrianRoutes = routesService.getRoutesByCategory();
         model.addAttribute("allPedestrianRoutes",allPedestrianRoutes);
         return "pedestrian";
     }

@@ -12,10 +12,10 @@
     </parent>
 
     <groupId>bg.softuni</groupId>
-    <artifactId>pathfinder</artifactId>
+    <artifactId>hikeAddicts</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>pathfinder</name>
-    <description>pathfinder</description>
+    <name>hikeAddicts</name>
+    <description>hikeAddicts</description>
 
     <properties>
         <java.version>17</java.version>

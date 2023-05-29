@@ -10,3 +10,8 @@ Spring-MVC web app
  It is build for educational purposses  
 The application is dockerized , you can run the compose file and run the container 
 
+![Home-page](https://github.com/DenisPasha/Hike-Addicts/blob/master/home-page.PNG)
+![peak-info](https://github.com/DenisPasha/Hike-Addicts/blob/master/Peak-info.PNG)
+![Home-page](https://github.com/DenisPasha/Hike-Addicts/blob/master/profile.PNG)
+![Home-page](https://github.com/DenisPasha/Hike-Addicts/blob/master/route-types.PNG)
+

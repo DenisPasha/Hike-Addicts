@@ -28,7 +28,6 @@ class CommentServiceTest {
     private CommentRepository commentRepository;
     private UserService userService;
     private ModelMapper modelMapper;
-
     private CommentService commentService;
 
 

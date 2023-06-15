@@ -8,7 +8,8 @@ services:
       - "3307:3306"
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 125963Denis
+      # replace password with your mysql server password
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: hikeAddicts
 
 
@@ -32,7 +33,8 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://database-container:3306/hikeAddicts
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 125963Denis
+      # replace password with your mysql server password
+      SPRING_DATASOURCE_PASSWORD: password
 
   prometheus:
     image: prom/prometheus:v2.43.0

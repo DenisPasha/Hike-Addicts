@@ -1,0 +1,9 @@
+bg\softuni\pathfinder\service\UserServiceTest.class
+bg\softuni\pathfinder\service\RoutesServiceTest.class
+bg\softuni\pathfinder\web\PagesControllerTest.class
+bg\softuni\pathfinder\service\RegisterServiceTest.class
+bg\softuni\pathfinder\web\AuthControllerTest.class
+bg\softuni\pathfinder\web\RoutesControllerTest.class
+bg\softuni\pathfinder\PathfinderApplicationTests.class
+bg\softuni\pathfinder\web\RegisterControllerTest.class
+bg\softuni\pathfinder\service\CommentServiceTest.class

@@ -33,8 +33,6 @@ public class DbInit implements CommandLineRunner {
             initRoles();
             initAdminUser();
         }
-
-
     }
 
     private void initAdminUser() {

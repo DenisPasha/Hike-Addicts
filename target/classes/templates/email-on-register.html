@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>registration</title>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="col-md-10">
+    <h1>Dear </h1>
+    <h1 th:text="${fullName}"></h1>
+    <h2>Welcome to Hike-Addicts </h2>
+    <h2>Please confirm your email by clicking the link below  </h2>
+      <a class="btn" th:href="@{localhost:8080/users/register/confirm/{token}(token=${token})}" > click here </a>
+  </div>
+</div>
+</body>
+</html>

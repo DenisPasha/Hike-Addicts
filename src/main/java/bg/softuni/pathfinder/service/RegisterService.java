@@ -16,8 +16,9 @@ import java.time.LocalDateTime;
 @Service
 public class RegisterService {
 
-    private final TokenRepository tokenRepository;
 
+
+    private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final EmailService emailService;

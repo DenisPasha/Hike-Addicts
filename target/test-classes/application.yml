@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+    username: SA
+    url: jdbc:hsqldb:mem:testdb;sql.syntax_mys=true;DB_CLOSE_DELAY=-1
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.HSQLDialect
+
+mail:
+  # raplace localhost with my-mailhog   mailhog container name
+  host: "maihog"
+  port: 1025
+  username: "hike@addict.com"
+  password: ""

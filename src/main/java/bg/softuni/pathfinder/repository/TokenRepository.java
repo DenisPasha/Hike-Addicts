@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface TokenRepository extends JpaRepository<EmailConfirmationToken , Long> {
 
     Optional<EmailConfirmationToken> findEmailConfirmationTokenByToken(String token);
+
 }

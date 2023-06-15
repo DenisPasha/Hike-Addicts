@@ -61,7 +61,12 @@ public class EmailService  {
 
 
     public String getMessage(
-            String fullName , User userEntity, HttpServletRequest request, HttpServletResponse response, ServletContext context){
+            String fullName ,
+            User userEntity,
+            HttpServletRequest request,
+            HttpServletResponse response,
+            ServletContext context){
+
         EmailConfirmationToken token = createConfirmationToken(userEntity);
 
         WebContext webContext = new WebContext(request, response, context);
